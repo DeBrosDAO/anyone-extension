@@ -153,7 +153,7 @@ This extension routes traffic only through the proxies you choose. We do not col
 
 <div align="center">
 
-**Created by [DeBros](https://debros.io)** | **Version 2.0.2**
+**Created by [DeBros](https://debros.io)** | **Version 2.0.3**
 
 
 [![Support DeBros](https://img.shields.io/badge/Support-DeBros-cyan?style=for-the-badge)](https://debros.io/donate)
