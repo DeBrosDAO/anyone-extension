@@ -529,7 +529,7 @@ async function refreshProxies() {
 
   // Get the stored proxy source setting
   const settings = await sendMessage({ action: 'getSettings' });
-  const source = settings.settings?.proxySource || 'arweave';
+  const source = settings.settings?.proxySource || 'github';
 
   const response = await sendMessage({ action: 'fetchProxies', source });
 
@@ -539,7 +539,7 @@ async function refreshProxies() {
 
   if (response.success) {
     // Show which source was used (especially if fallback occurred)
-    const sourceNames = { arweave: 'Arweave', git: 'GitBros', github: 'GitHub' };
+    const sourceNames = { github: 'GitHub', git: 'GitBros' };
     const usedName = sourceNames[response.usedSource] || response.usedSource;
 
     if (response.usedSource && response.usedSource !== source) {

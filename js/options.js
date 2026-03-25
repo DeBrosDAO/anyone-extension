@@ -284,19 +284,16 @@ async function handleProxySourceChange() {
 
 function updateSourceNameDisplay(source) {
   const names = {
-    git: 'GitBros',
     github: 'GitHub',
-    arweave: 'Arweave'
+    git: 'GitBros'
   };
   const urls = {
-    git: 'git.debros.io/DeBros/anyone-proxy-list',
-    github: 'github.com/DeBrosOfficial/anyone-proxy-list',
-    arweave: 'arweave.net/FjxfWIbS...B8'
+    github: 'github.com/DeBrosDAO/anyone-proxy-list',
+    git: 'git.debros.io/DeBros/anyone-proxy-list'
   };
   const fullUrls = {
-    git: 'https://git.debros.io/DeBros/anyone-proxy-list',
-    github: 'https://github.com/DeBrosOfficial/anyone-proxy-list',
-    arweave: 'https://arweave.net/FjxfWIbSnZb7EaJWbeuWCsBBFWjTppfS3_KHxUP__B8'
+    github: 'https://github.com/DeBrosDAO/anyone-proxy-list',
+    git: 'https://git.debros.io/DeBros/anyone-proxy-list'
   };
   const externalIcon = `<svg class="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -395,14 +392,14 @@ async function refreshProxies() {
   const originalText = elements.btnRefreshProxies.innerHTML;
   elements.btnRefreshProxies.innerHTML = '<span>Refreshing...</span>';
 
-  const source = elements.proxySource.value || 'arweave';
+  const source = elements.proxySource.value || 'github';
   const response = await sendMessage({ action: 'fetchProxies', source });
 
   elements.btnRefreshProxies.disabled = false;
   elements.btnRefreshProxies.innerHTML = originalText;
 
   if (response.success) {
-    const sourceNames = { arweave: 'Arweave', git: 'GitBros', github: 'GitHub' };
+    const sourceNames = { github: 'GitHub', git: 'GitBros' };
     const usedName = sourceNames[response.usedSource] || response.usedSource;
 
     if (response.usedSource && response.usedSource !== source) {

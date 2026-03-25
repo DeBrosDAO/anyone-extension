@@ -233,8 +233,8 @@ const ProxyManager = {
 
     let proxies = this._proxyList;
 
-    // Test proxies in parallel
-    const results = await this.testProxiesParallel(proxies);
+    // Test proxies sequentially
+    const results = await this.testProxiesParallel(proxies, 1);
 
     // Filter working proxies and sort by latency
     const working = results
@@ -312,9 +312,9 @@ const ProxyManager = {
    * @param {string} source - Source key from CONFIG.PROXY_SOURCES
    * @returns {Promise<{success: boolean, proxies: object[], error: string|null, usedSource: string|null}>}
    */
-  async fetchProxyList(source = 'arweave') {
+  async fetchProxyList(source = 'github') {
     // Define fallback order
-    const fallbackOrder = ['arweave', 'git', 'github'];
+    const fallbackOrder = ['github', 'git'];
 
     // Start with the requested source, then try others
     const sourcesToTry = [source, ...fallbackOrder.filter(s => s !== source)];

@@ -317,7 +317,7 @@ async function handleNextProxy() {
  * @param {string} source - Proxy source
  * @returns {Promise<object>}
  */
-async function handleFetchProxies(source = 'arweave') {
+async function handleFetchProxies(source = 'github') {
   const result = await ProxyManager.fetchProxyList(source);
 
   if (result.success) {

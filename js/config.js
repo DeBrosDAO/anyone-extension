@@ -18,26 +18,21 @@ const CONFIG = {
     WEBRTC_PROTECTION: false,
     KILL_SWITCH: false,
     BYPASS_LOCAL: true,
-    PROXY_SOURCE: 'arweave',
+    PROXY_SOURCE: 'github',
     UPDATE_INTERVAL: 0 // manual only
   },
 
   // Proxy Sources
   PROXY_SOURCES: {
-    arweave: {
-      name: 'Arweave',
-      url: 'https://arweave.net/FjxfWIbSnZb7EaJWbeuWCsBBFWjTppfS3_KHxUP__B8',
-      icon: 'AR'
+    github: {
+      name: 'GitHub',
+      url: 'https://raw.githubusercontent.com/DeBrosDAO/anyone-proxy-list/refs/heads/main/anonproxies.json',
+      icon: 'GH'
     },
     git: {
       name: 'GitBros',
       url: 'https://git.debros.io/DeBros/anyone-proxy-list/raw/branch/main/anonproxies.json',
       icon: 'GIT'
-    },
-    github: {
-      name: 'GitHub',
-      url: 'https://raw.githubusercontent.com/DeBrosOfficial/anyone-proxy-list/refs/heads/main/anonproxies.json',
-      icon: 'GH'
     }
   },
 
