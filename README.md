@@ -12,7 +12,7 @@ A privacy-focused Chromium browser extension for managing SOCKS5 proxy connectio
 - **One-click connect** to community-powered ANyONe proxy servers
 - **Auto-selection** of the fastest available proxy
 - **Load balancing** with "Next Proxy" button to switch servers
-- **Multiple sources**: Arweave, GitBros, or GitHub
+- **Multiple sources**: GitHub or GitBros
 - **Automatic fallback**: If one source fails, tries the next automatically
 
 #### Custom Proxy Mode
@@ -33,7 +33,7 @@ A privacy-focused Chromium browser extension for managing SOCKS5 proxy connectio
 
 - **Auto-connect on startup** - Automatically connect when browser starts
 - **Default connection mode** - Choose Public or Custom as default
-- **Proxy source selection** - Arweave (default), GitBros, or GitHub with automatic fallback
+- **Proxy source selection** - GitHub or GitBros with automatic fallback
 - **Update interval** - Manual, hourly, or periodic auto-updates of proxy list
 
 ### User Interface
@@ -90,11 +90,10 @@ The extension fetches proxy lists from multiple sources with automatic fallback:
 
 | Source | URL | Type |
 |--------|-----|------|
-| **Arweave** (Default) | [arweave.net/FjxfWIbS...](https://arweave.net/FjxfWIbSnZb7EaJWbeuWCsBBFWjTppfS3_KHxUP__B8) | Decentralized, permanent |
 | **GitBros** | [git.debros.io/DeBros/anyone-proxy-list](https://git.debros.io/DeBros/anyone-proxy-list) | Self-hosted Git |
 | **GitHub** | [github.com/DeBrosOfficial/anyone-proxy-list](https://github.com/DeBrosOfficial/anyone-proxy-list) | Centralized backup |
 
-**Fallback order:** Arweave → GitBros → GitHub
+**Fallback order:** GitHub → GitBros 
 
 ## Privacy Settings Explained
 
