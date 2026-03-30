@@ -307,7 +307,6 @@ async function handleNextProxy() {
       status: 'connected',
       proxy: result.proxy
     });
-  } else {
   }
 
   return result;
@@ -442,7 +441,7 @@ async function handleSaveSettings(settings) {
           Utils.log('warn', 'Custom proxy settings invalid, disconnecting...');
           await ProxyManager.disconnect();
           await Storage.setProxyEnabled(false);
-                broadcastMessage({
+          broadcastMessage({
             action: 'statusUpdate',
             status: 'error',
             error: 'Custom proxy not configured'
@@ -457,7 +456,7 @@ async function handleSaveSettings(settings) {
           );
 
           if (result) {
-                    broadcastMessage({
+            broadcastMessage({
               action: 'statusUpdate',
               status: 'connected',
               proxy: { host: customProxy.ip, port: customProxy.port },
@@ -467,7 +466,7 @@ async function handleSaveSettings(settings) {
             // Failed to apply - disconnect
             await ProxyManager.disconnect();
             await Storage.setProxyEnabled(false);
-                    broadcastMessage({
+            broadcastMessage({
               action: 'statusUpdate',
               status: 'error',
               error: 'Failed to apply proxy settings'
@@ -556,7 +555,6 @@ function broadcastMessage(message) {
     // Ignore errors when no listeners
   });
 }
-
 
 /**
  * Handle proxy errors
