@@ -178,14 +178,10 @@ const ProxyManager = {
             resolve({ working: true, latency });
           } else {
             Utils.log('debug', `Proxy ${proxy.host}:${proxy.port} returned ${response.status}`);
-            // Clear proxy settings on failure
-            chrome.proxy.settings.clear({});
             resolve({ working: false, latency: null });
           }
         } catch (error) {
           Utils.log('debug', `Proxy ${proxy.host}:${proxy.port} failed: ${error.name} - ${error.message}`);
-          // Clear proxy settings on failure
-          chrome.proxy.settings.clear({});
           resolve({ working: false, latency: null });
         }
       });
@@ -419,7 +415,9 @@ const ProxyManager = {
       return { success: true, proxy: proxyWithLatency, error: null };
     }
 
-    return { success: false, proxy: null, error: 'Failed to apply proxy settings' };
+    // applyProxy failed - try next proxy instead of giving up
+    Utils.log('warn', `Failed to apply proxy ${proxy.host}:${proxy.port} with full config, trying next...`);
+    return this.fallbackToNext(attemptCount + 1);
   },
 
   /**

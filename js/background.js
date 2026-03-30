@@ -594,6 +594,8 @@ chrome.proxy.onProxyError.addListener(async (details) => {
         await applyKillSwitch(false);
         Utils.log('info', 'Kill switch deactivated after successful fallback');
       }
+      // Reset debounce so next error on new proxy triggers immediate fallback
+      lastProxyErrorTime = 0;
       broadcastMessage({
         action: 'statusUpdate',
         status: 'connected',
