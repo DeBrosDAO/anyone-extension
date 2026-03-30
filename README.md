@@ -91,7 +91,7 @@ The extension fetches proxy lists from multiple sources with automatic fallback:
 | Source | URL | Type |
 |--------|-----|------|
 | **GitBros** | [git.debros.io/DeBros/anyone-proxy-list](https://git.debros.io/DeBros/anyone-proxy-list) | Self-hosted Git |
-| **GitHub** | [github.com/DeBrosOfficial/anyone-proxy-list](https://github.com/DeBrosOfficial/anyone-proxy-list) | Centralized backup |
+| **GitHub** | [github.com/DeBrosDAO/anyone-proxy-list](https://github.com/DeBrosDAO/anyone-proxy-list) | Centralized backup |
 
 **Fallback order:** GitHub → GitBros 
 
