@@ -375,9 +375,10 @@ const ProxyManager = {
 
   /**
    * Fallback to next proxy
+   * @param {number} attemptCount - Number of attempts made
    * @returns {Promise<{success: boolean, proxy: object|null, error: string|null}>}
    */
-  async fallbackToNext() {
+  async fallbackToNext(attemptCount = 0) {
     if (this._proxyList.length === 0) {
       return { success: false, proxy: null, error: 'No proxies available. Please refresh the proxy list.' };
     }
@@ -386,17 +387,23 @@ const ProxyManager = {
       return { success: false, proxy: null, error: 'Only one proxy available' };
     }
 
+    // Prevent infinite loop - stop after trying all proxies
+    if (attemptCount >= this._proxyList.length) {
+      Utils.log('error', 'All proxies failed, no working proxy found');
+      return { success: false, proxy: null, error: 'All proxies are unavailable' };
+    }
+
     this._currentIndex = (this._currentIndex + 1) % this._proxyList.length;
     const proxy = this._proxyList[this._currentIndex];
 
-    Utils.log('info', `Switching to proxy ${this._currentIndex + 1}/${this._proxyList.length}: ${proxy.host}:${proxy.port}`);
+    Utils.log('info', `Switching to proxy ${this._currentIndex + 1}/${this._proxyList.length}: ${proxy.host}:${proxy.port} (attempt ${attemptCount + 1}/${this._proxyList.length})`);
 
     // Test the proxy first to get latency
     const testResult = await this.testProxy(proxy);
     if (!testResult.working) {
       // Try next proxy if this one doesn't work
       Utils.log('warn', `Proxy ${proxy.host}:${proxy.port} not working, trying next...`);
-      return this.fallbackToNext();
+      return this.fallbackToNext(attemptCount + 1);
     }
 
     // Merge test results (latency) with proxy info

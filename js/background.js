@@ -307,6 +307,7 @@ async function handleNextProxy() {
       status: 'connected',
       proxy: result.proxy
     });
+  } else {
   }
 
   return result;
@@ -441,7 +442,7 @@ async function handleSaveSettings(settings) {
           Utils.log('warn', 'Custom proxy settings invalid, disconnecting...');
           await ProxyManager.disconnect();
           await Storage.setProxyEnabled(false);
-          broadcastMessage({
+                broadcastMessage({
             action: 'statusUpdate',
             status: 'error',
             error: 'Custom proxy not configured'
@@ -456,7 +457,7 @@ async function handleSaveSettings(settings) {
           );
 
           if (result) {
-            broadcastMessage({
+                    broadcastMessage({
               action: 'statusUpdate',
               status: 'connected',
               proxy: { host: customProxy.ip, port: customProxy.port },
@@ -466,7 +467,7 @@ async function handleSaveSettings(settings) {
             // Failed to apply - disconnect
             await ProxyManager.disconnect();
             await Storage.setProxyEnabled(false);
-            broadcastMessage({
+                    broadcastMessage({
               action: 'statusUpdate',
               status: 'error',
               error: 'Failed to apply proxy settings'
@@ -556,6 +557,7 @@ function broadcastMessage(message) {
   });
 }
 
+
 /**
  * Handle proxy errors
  */
@@ -573,14 +575,27 @@ chrome.proxy.onProxyError.addListener(async (details) => {
 
   Utils.log('error', 'Proxy error', details);
 
+  // Check if proxy is enabled - don't reconnect if user disconnected
+  const proxyEnabled = await Storage.isProxyEnabled();
+  if (!proxyEnabled) {
+    Utils.log('debug', 'Proxy disabled, ignoring error');
+    return;
+  }
+
   // Check current mode - only attempt fallback for public proxies
   const mode = await Storage.getMode();
   const killSwitch = await Storage.getValue(CONFIG.STORAGE_KEYS.KILL_SWITCH, false);
 
-  // For non-fatal errors in public mode, attempt fallback
-  if (!details.fatal && mode === CONFIG.MODES.PUBLIC) {
+  // For public mode, always attempt fallback (regardless of fatal flag)
+  if (mode === CONFIG.MODES.PUBLIC) {
     const result = await ProxyManager.fallbackToNext();
     if (result.success) {
+      // Deactivate kill switch if it was active
+      const killSwitchActive = await Storage.getValue('killSwitchActive', false);
+      if (killSwitchActive) {
+        await applyKillSwitch(false);
+        Utils.log('info', 'Kill switch deactivated after successful fallback');
+      }
       broadcastMessage({
         action: 'statusUpdate',
         status: 'connected',
@@ -653,23 +668,17 @@ async function applyKillSwitch(activate) {
       };
       await chrome.proxy.settings.set({ value: config, scope: 'regular' });
       await Storage.setValue('killSwitchActive', true);
+      // Show red badge with exclamation mark
+      await chrome.action.setBadgeText({ text: '!' });
+      await chrome.action.setBadgeBackgroundColor({ color: '#E74C3C' });
       Utils.log('info', 'Kill switch ACTIVATED - all traffic blocked');
-
-      // Update icon to show blocked state
-      try {
-        await chrome.action.setBadgeText({ text: '!' });
-        await chrome.action.setBadgeBackgroundColor({ color: '#e74c3c' });
-      } catch (e) {}
     } else {
       // Deactivate kill switch - clear proxy settings
       await chrome.proxy.settings.clear({ scope: 'regular' });
       await Storage.setValue('killSwitchActive', false);
+      // Remove badge
+      await chrome.action.setBadgeText({ text: '' });
       Utils.log('info', 'Kill switch DEACTIVATED - traffic restored');
-
-      // Clear badge
-      try {
-        await chrome.action.setBadgeText({ text: '' });
-      } catch (e) {}
     }
     return true;
   } catch (error) {
